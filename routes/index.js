@@ -1,8 +1,9 @@
 const express = require('express');
 const routes = express();
 
-const { userLogin,users,items,notification,imageUpload } = require('./mobile');
+const { userLogin,users,items,notification,imageUpload,auth } = require('./mobile');
 
+routes.use('/auth', auth);
 routes.use('/login', userLogin);
 routes.use('/user', users);
 routes.use('/items', items);

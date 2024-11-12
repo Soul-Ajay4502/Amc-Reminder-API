@@ -37,7 +37,7 @@ function checkFileType(file, cb) {
     } else {
         cb('Error: Images Only!');
     }
-}q
+}
 
 // Route to handle image upload
 app.post('/upload', checkAuth, async (req, res) => {

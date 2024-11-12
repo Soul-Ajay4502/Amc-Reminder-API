@@ -2,7 +2,7 @@ const http = require('http');
 require('dotenv').config();
 const app = require('./app');
 
-const port = process.env.PORT || 7070;
+const port = process.env.PORT || 7075;
 
 const server = http.createServer(app);
 
