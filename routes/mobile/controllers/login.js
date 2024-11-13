@@ -288,26 +288,12 @@ const forgotPassword = async (req, res, next) => {
             const updateQuery = `UPDATE user_login SET forgot_otp = ? , expires_at = ? WHERE user_id= ?`;
             const updateData = [otp, expiresAt, user_id];
             const [updateResult] = await conn.query(updateQuery, updateData);
+            const htmlTemplate = getChangePasswordOTPEmailHtml(otp);
             await sendMail({
                 to: username, // recipient's email
                 subject: "AMC-UCC OTP FOR FORGOT PASSWORD",
                 text: `Your OTP for password reset is ${otp}. It is valid for 10 minutes.`,
-                html: `<div style="display:flex; justify-content:center; width:100%">
-                <div style="font-family: Arial, sans-serif; text-align: right; width:70%">
-                        <div style="font-family: Arial, sans-serif; text-align: left;">
-                            <h2 style="text-align: center;">Password Reset OTP</h2>
-                            <div style="border: 2px solid #000; padding: 15px; border-radius:10px">
-                            <p>Dear User,</p>
-                            <p>Your OTP for resetting the password is:</p>
-                            <h1 style="color: #ff6600;text-align: center;">${otp}</h1>
-                            <p>This OTP is valid for 10 minutes. Please use it promptly to reset your password.</p>
-                            <p>If you did not request a password reset, please ignore this email.</p>
-                            <br>
-                            </div>
-                        </div>
-                    <p>Best regards,</p>
-                    <p>AMC-UCC Support Team</p></div>
-                    </div>`,
+                html: htmlTemplate,
             });
 
             return res.status(200).json({
@@ -391,3 +377,48 @@ module.exports = {
     forgotPassword,
     resetPassword,
 };
+
+function getChangePasswordOTPEmailHtml(otp) {
+    return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	
+	<head>
+	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <title>Verify your login</title>
+	  <!--[if mso]><style type="text/css">body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }</style><![endif]-->
+	</head>
+	
+	<body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
+	  <table role="presentation"
+		style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(239, 239, 239);">
+		<tbody>
+		  <tr>
+			<td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+			  <table role="presentation" style="background-color: rgb(255, 255, 255);max-width: 600px; border: 0px;border-radius:10px; border-spacing: 0px; text-align: left;">
+				<tbody>
+				  <tr>
+					<td style="padding: 40px 0px 0px;">
+					  <div style="text-align: center;">
+					
+					  <div style="padding: 20px; background-color: rgb(255, 255, 255);">
+						<div style="color: rgb(0, 0, 0); text-align: center;">
+						  <h1 style="margin: 1rem 0">Verification code</h1>
+						  <p style="padding-bottom: 16px">Your OTP for resetting the password is:</p>
+						  <p style="padding-bottom: 16px"><strong style="font-size: 130%"> ${otp} </strong></p>
+						   <p style="padding-bottom: 16px">This OTP is valid for 10 minutes. Please use it promptly to reset your password.If you did not request a password reset, please ignore this email.</p>
+						  <p style="padding-bottom: 16px; text-align:left">Thanks,<br>AMC-UCC</p>
+						</div>
+					  </div>
+					  <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
+					  </div>
+					</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</td>
+		  </tr>
+		</tbody>
+	
+	</html>`;
+}
