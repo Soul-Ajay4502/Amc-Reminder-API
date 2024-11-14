@@ -83,8 +83,16 @@ app.post("/upload", checkAuth, async (req, res) => {
 
         try {
             // Fetch the current image filename for the user
-            const queryGetImage = `SELECT * FROM user_details WHERE user_id = ?`;
+            const queryGetImage = `SELECT * FROM view_user_details WHERE user_id = ?`;
             const [result] = await db.query(queryGetImage, [user_id]);
+            if (result.length <= 0) {
+                res.status(200).json({
+                    statusCode: 200,
+                    isError: false,
+                    responseData: [],
+                    statusText: "Image uploaded successfully",
+                });
+            }
             const user = result[0] || {};
             const existingFilename = result[0]?.dp_image;
             if (existingFilename) {
