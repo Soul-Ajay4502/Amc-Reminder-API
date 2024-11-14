@@ -18,13 +18,33 @@ const getLocalIp = () => {
     return "localhost"; // fallback to localhost if no IP found
 };
 
+const getImgUrl = ({ fileName = "", req = {} }) => {
+    const ipWithPort = `${getLocalIp()}:${process.env.PORT || 7075}`;
+    const imageUrl = `${req.protocol}://${ipWithPort}/profile/${fileName}`;
+
+    // Modify the rows to include the dpUrl
+    return imageUrl;
+};
+
 const listUsers = async (req, res, next) => {
     try {
         const [rows] = await db.query("SELECT * FROM view_user_details");
+        const response =
+            rows.length > 0
+                ? rows.map((element) => ({
+                      ...element,
+                      dp_url:
+                          element.dp_image &&
+                          getImgUrl({
+                              fileName: element.dp_image,
+                              req: req,
+                          }), // Add the image URL to each user
+                  }))
+                : [];
         res.status(200).json({
             statusCode: 200,
             isError: false,
-            responseData: rows,
+            responseData: response,
             statusText: "Users retrieved successfully",
         });
     } catch (error) {
