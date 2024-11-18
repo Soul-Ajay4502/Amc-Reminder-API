@@ -7,6 +7,7 @@ const {
     login,
     forgotPassword,
     resetPassword,
+    setFcmToken,
 } = require("./controllers/controllerIndex");
 const { checkAuth, getDbConnection } = require("../../middlewares");
 
@@ -16,5 +17,6 @@ router.post("/logout", logout);
 router.post("/changePassword", checkAuth, getDbConnection, changePassword);
 router.post("/forgotPassword", getDbConnection, forgotPassword); //for send otp mail
 router.post("/resetPassword", getDbConnection, resetPassword); //for validate otp and update password
+router.post("/setFcm", checkAuth, getDbConnection, setFcmToken); //for validate otp and update password
 
 module.exports = router;

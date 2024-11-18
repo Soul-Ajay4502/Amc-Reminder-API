@@ -41,6 +41,8 @@ const listUsers = async (req, res, next) => {
                           }), // Add the image URL to each user
                   }))
                 : [];
+        console.log("response", response);
+
         res.status(200).json({
             statusCode: 200,
             isError: false,
@@ -77,14 +79,14 @@ const getUserWithId = async (req, res, next) => {
     const userId = req.query.id || req.user.user_id;
     try {
         const [rows] = await db.query(
-            "SELECT * FROM view_user_details WHERE user_id = ?",
+            "SELECT * FROM user_details_with_login WHERE user_id = ?",
             [userId]
         );
 
         // Check if rows exist
         if (rows.length === 0) {
-            return res.status(404).json({
-                statusCode: 404,
+            return res.status(400).json({
+                statusCode: 400,
                 isError: true,
                 statusText: "User not found",
             });
@@ -97,7 +99,8 @@ const getUserWithId = async (req, res, next) => {
 
         // Modify the rows to include the dpUrl
         rows.forEach((element) => {
-            element.dp_url = imageUrl; // Add the image URL to each user
+            element.dp_url = imageUrl;
+            element.email = element.username; // Add the image URL to each user
         });
 
         // Send the modified response

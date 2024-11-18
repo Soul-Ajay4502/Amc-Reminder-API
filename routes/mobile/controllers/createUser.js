@@ -49,8 +49,8 @@ const createUser = async (req, res, next) => {
         // Commit transaction
         await conn.commit();
 
-        return res.status(201).json({
-            statusCode: 201,
+        return res.status(200).json({
+            statusCode: 200,
             isError: false,
             statusText: "User created successfully",
             responseData: {
@@ -61,13 +61,9 @@ const createUser = async (req, res, next) => {
         });
     } catch (error) {
         // Rollback transaction in case of error
-        conn.rollback();
+        conn?.rollback();
         console.error(error);
-        return res.status(500).json({
-            statusCode: 500,
-            isError: true,
-            statusText: "Internal server error",
-        });
+        return send500Error(res, error);
     } finally {
         if (conn) await conn.release();
     }

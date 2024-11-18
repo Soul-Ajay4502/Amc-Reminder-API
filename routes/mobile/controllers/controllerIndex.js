@@ -5,6 +5,7 @@ const {
     changePassword,
     forgotPassword,
     resetPassword,
+    setFcmToken,
 } = require("./login");
 const createUser = require("./createUser");
 const { listUsers, getUserWithId } = require("./listUsers");
@@ -35,4 +36,5 @@ module.exports = {
     changePassword,
     forgotPassword,
     resetPassword,
+    setFcmToken,
 };

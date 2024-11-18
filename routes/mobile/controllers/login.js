@@ -154,8 +154,31 @@ const refreshtokenFn = async (req, res, next) => {
                     } else {
                         try {
                             console.log("us", user);
+                            const {
+                                user_id,
+                                display_name,
+                                user_created_at,
+                                dp_image,
+                                login_id,
+                                username,
+                                user_password,
+                                last_login,
+                                role_id,
+                                role_name,
+                            } = user;
 
-                            const token = generateAccessToken(user);
+                            const token = generateAccessToken({
+                                user_id,
+                                display_name,
+                                user_created_at,
+                                dp_image,
+                                login_id,
+                                username,
+                                user_password,
+                                last_login,
+                                role_id,
+                                role_name,
+                            });
 
                             res.status(200)
                                 .json({
@@ -369,6 +392,38 @@ const resetPassword = async (req, res, next) => {
     }
 };
 
+const setFcmToken = async (req, res, next) => {
+    const { fcmToken } = req.body;
+    // Validate required fields
+    if (!fcmToken) {
+        return res.status(400).json({
+            statusCode: 400,
+            isError: true,
+            statusText: "FCM token is required",
+        });
+    }
+
+    // SQL query to insert the assignment
+    const query = `
+        UPDATE user_details (user_id, fcm_token)
+        VALUES (?, ?)
+    `;
+    try {
+        const [result] = await db.query(query, [req.user.user_id, fcmToken]);
+        res.status(201).json({
+            statusCode: 201,
+            isError: false,
+            responseData: {
+                item_id: result.insertId,
+            },
+            statusText: `Fcm token added`,
+        });
+    } catch (error) {
+        console.error("Error creating item:", error);
+        return send500Error(res, error);
+    }
+};
+
 module.exports = {
     login,
     refreshtokenFn,
@@ -376,6 +431,7 @@ module.exports = {
     changePassword,
     forgotPassword,
     resetPassword,
+    setFcmToken,
 };
 
 function getChangePasswordOTPEmailHtml(otp) {
