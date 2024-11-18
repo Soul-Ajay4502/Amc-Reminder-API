@@ -1,21 +1,21 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const routes = require('./routes');
+const cors = require("cors");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const routes = require("./routes");
 
 // setup cors
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header("Access-Control-Allow-Origin", "*");
     res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
-    if (req.method === 'OPTIONS') {
+    if (req.method === "OPTIONS") {
         res.header(
-            'Access-Control-Allow-Methods',
-            'PUT, POST, PATCH, DELETE, GET'
+            "Access-Control-Allow-Methods",
+            "PUT, POST, PATCH, DELETE, GET"
         );
         return res.status(200).json({});
     }
@@ -28,25 +28,25 @@ app.use(cors());
 // use morgan logger
 app.use(
     morgan(
-        ':method :url :status :res[content-length] - :response-time ms - :date[web]'
+        ":method :url :status :res[content-length] - :response-time ms - :date[web]"
     )
 );
 
 // set bodyParser
 app.use(
     bodyParser.urlencoded({
-        extended: false,
+        extended: true,
     })
 );
 app.use(bodyParser.json());
 
-app.use('/profile', express.static('public/profile'));
+app.use("/profile", express.static("public/profile"));
 
-app.use('/api', routes);
+app.use("/api", routes);
 
 // 404 not found
 app.use((req, res, next) => {
-    const error = new Error('Not found');
+    const error = new Error("Not found");
     error.status = 404;
     next(error);
 });
@@ -62,7 +62,6 @@ app.use((error, req, res, next) => {
 });
 
 //define routes here
-
 
 // Use the imported routes
 // app.use('/api', routes);

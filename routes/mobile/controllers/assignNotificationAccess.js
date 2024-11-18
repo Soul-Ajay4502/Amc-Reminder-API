@@ -1,32 +1,40 @@
-const send500Error = require('../../../common/send500Error');
-const db = require('../../../config/dbConnection');
+const send500Error = require("../../../common/send500Error");
+const db = require("../../../config/dbConnection");
 
-const createAssignment =async (req, res) => {
-    const { user_id } = req.body;
-    const assigned_by=req.user.user_id;    
+const createAssignment = async (req, res) => {
+    const { userId, allowNotification } = req.body;
     // Validate required fields
-    if (!user_id ) {
-        return res.status(400).json({ error: "user_id is required" });
+    if (!userId) {
+        return res.status(400).json({
+            statusCode: 400,
+            isError: true,
+            statusText: "userId required",
+        });
     }
-
+    const ACCESS = {
+        0: "Removed",
+        1: "Granted",
+    };
     // SQL query to insert the assignment
     const query = `
-        INSERT INTO user_notification_assignment (user_id, assigned_by)
+        UPDATE user_details (user_id, allow_notification)
         VALUES (?, ?)
     `;
     try {
-        const [result] = await db.query(query, [user_id, assigned_by]);
+        const [result] = await db.query(query, [userId, allowNotification]);
         res.status(201).json({
             statusCode: 201,
             isError: false,
             responseData: {
                 item_id: result.insertId,
             },
-            statusText: 'Item created successfully',
+            statusText: `Notification access ${
+                ACCESS[Number(allowNotification)]
+            } successfully`,
         });
     } catch (error) {
-        console.error('Error creating item:', error);
+        console.error("Error creating item:", error);
         return send500Error(res, error);
     }
 };
-module.exports=createAssignment
+module.exports = createAssignment;
