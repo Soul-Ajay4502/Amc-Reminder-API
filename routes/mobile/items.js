@@ -9,10 +9,12 @@ const {
     getItemById,
     updateItem,
     searchItem,
+    listDeletedItems,
 } = require("./controllers/controllerIndex");
 
 router.post("/add", checkAuth, getDbConnection, createItem);
 router.get("/list", checkAuth, listItems);
+router.get("/listDeletedItems", checkAuth, listDeletedItems);
 router.post("/remove", checkAuth, removeItem);
 router.get("/listby/:id", checkAuth, getItemById);
 router.post("/update", checkAuth, updateItem);

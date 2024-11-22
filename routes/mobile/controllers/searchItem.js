@@ -25,21 +25,13 @@ const searchItemByName = async (req, res, next) => {
             parseInt(limit)
         );
 
-        if (results.length > 0) {
-            res.status(200).json({
-                statusCode: 200,
-                isError: false,
-                responseData: results,
-                statusText: "Items found",
-            });
-        } else {
-            res.status(404).json({
-                statusCode: 404,
-                isError: true,
-                responseData: null,
-                statusText: "No items found",
-            });
-        }
+        res.status(200).json({
+            statusCode: 200,
+            isError: false,
+            responseData: results.data,
+            pagination: results.pagination,
+            statusText: "Items found",
+        });
     } catch (error) {
         console.error("Error searching for item:", error);
         return send500Error(res, error);
