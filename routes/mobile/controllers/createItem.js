@@ -11,8 +11,27 @@ const createItem = async (req, res, next) => {
         total_number_of_item,
     } = req.body;
 
+    if (
+        !manufacturer ||
+        !item_type ||
+        !item_name ||
+        !purchase_date ||
+        !expiry_date ||
+        !item_location ||
+        !total_number_of_item
+    ) {
+        return res.status(400).json({
+            statusCode: 400,
+            isError: true,
+            statusText:
+                total_number_of_item == 0
+                    ? "Invalid total number "
+                    : "All fields are required",
+        });
+    }
+
     const query = `
-        INSERT INTO item_details (manufacturer,item_name,item_type, purchase_date, expiry_date, item_location, total_number_of_item, created_by) 
+        INSERT IGNORE INTO item_details (manufacturer,item_name,item_type, purchase_date, expiry_date, item_location, total_number_of_item, created_by) 
         VALUES (?, ?, ?, ?, ?, ? ,?,?)
     `;
     const values = [
@@ -31,9 +50,11 @@ const createItem = async (req, res, next) => {
         res.status(201).json({
             statusCode: 201,
             isError: false,
-            responseData: {
-                item_id: result.insertId,
-            },
+            responseData: [
+                {
+                    item_id: result.insertId,
+                },
+            ],
             statusText: "Item created successfully",
         });
     } catch (error) {
