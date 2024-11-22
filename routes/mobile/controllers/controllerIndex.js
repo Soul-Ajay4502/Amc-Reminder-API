@@ -17,6 +17,7 @@ const updateItem = require("./updateItem");
 const removeItem = require("./removeItem");
 const removeAssignment = require("./removeNotificationAccess");
 const assignNotification = require("./assignNotificationAccess");
+const searchItem = require("./searchItem");
 
 module.exports = {
     login,
@@ -37,4 +38,5 @@ module.exports = {
     forgotPassword,
     resetPassword,
     setFcmToken,
+    searchItem,
 };

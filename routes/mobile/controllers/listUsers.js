@@ -41,7 +41,6 @@ const listUsers = async (req, res, next) => {
                           }), // Add the image URL to each user
                   }))
                 : [];
-        console.log("response", response);
 
         res.status(200).json({
             statusCode: 200,
