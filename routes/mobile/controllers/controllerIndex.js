@@ -14,7 +14,7 @@ const createItem = require("./createItem");
 const { listItems, listDeletedItems } = require("./listItems");
 const getItemById = require("./getItemById");
 const updateItem = require("./updateItem");
-const removeItem = require("./removeItem");
+const { removeItem, deleteItem } = require("./removeItem");
 const removeAssignment = require("./removeNotificationAccess");
 const assignNotification = require("./assignNotificationAccess");
 const searchItem = require("./searchItem");
@@ -40,4 +40,5 @@ module.exports = {
     resetPassword,
     setFcmToken,
     searchItem,
+    deleteItem,
 };

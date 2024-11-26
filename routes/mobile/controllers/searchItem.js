@@ -6,18 +6,12 @@ const searchItemByName = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1; // Default page is 1 if not provided
     const limit = parseInt(req.query.limit) || 10;
 
-    if (!ItemName) {
-        return res.status(400).json({
-            statusCode: 400,
-            isError: true,
-            statusText: "Item name is required",
-        });
-    }
-
+    const trimmedItemName = ItemName?.trim();
     try {
-        const query =
-            "SELECT * FROM item_details WHERE item_name LIKE ? AND item_status = 0";
-        const params = [`%${ItemName}%`];
+        const query = trimmedItemName
+            ? "SELECT * FROM item_details WHERE item_name LIKE ? AND item_status = 0"
+            : "SELECT * FROM item_details WHERE item_status = 0";
+        const params = trimmedItemName ? [`%${trimmedItemName}%`] : [];
         const results = await paginate(
             query,
             params,

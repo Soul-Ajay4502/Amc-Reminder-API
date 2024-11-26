@@ -10,12 +10,14 @@ const {
     updateItem,
     searchItem,
     listDeletedItems,
+    deleteItem,
 } = require("./controllers/controllerIndex");
 
 router.post("/add", checkAuth, getDbConnection, createItem);
 router.get("/list", checkAuth, listItems);
 router.get("/listDeletedItems", checkAuth, listDeletedItems);
 router.post("/remove", checkAuth, removeItem);
+router.post("/delete", checkAuth, deleteItem);
 router.get("/listby/:id", checkAuth, getItemById);
 router.post("/update", checkAuth, updateItem);
 router.post("/searchItem", checkAuth, searchItem);
