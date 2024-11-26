@@ -2,8 +2,7 @@ const send500Error = require("../../../common/send500Error");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../../middlewares/checkAuth");
-const { sendOtp } = require("../sendotp"); //using watsapp
-const { sendMail, sendWhatsAppMessage } = require("../../sendEmail");
+const { sendMail } = require("../../../common/sendEmail");
 
 const os = require("os");
 const generateOtp = require("../../../common/generateOtp");
@@ -109,7 +108,6 @@ const login = async (req, res, next) => {
 
 const refreshtokenFn = async (req, res, next) => {
     const { refreshToken } = req.body;
-    console.log(req.body);
 
     try {
         if (!refreshToken) {
@@ -153,7 +151,6 @@ const refreshtokenFn = async (req, res, next) => {
                             .end();
                     } else {
                         try {
-                            console.log("us", user);
                             const {
                                 user_id,
                                 display_name,
@@ -393,9 +390,9 @@ const resetPassword = async (req, res, next) => {
 };
 
 const setFcmToken = async (req, res, next) => {
-    const { fcmToken } = req.body;
-    // Validate required fields
-    if (!fcmToken) {
+    const { FCM_TOKEN } = req.body;
+    const { conn } = req;
+    if (!FCM_TOKEN) {
         return res.status(400).json({
             statusCode: 400,
             isError: true,
@@ -405,11 +402,10 @@ const setFcmToken = async (req, res, next) => {
 
     // SQL query to insert the assignment
     const query = `
-        UPDATE user_details (user_id, fcm_token)
-        VALUES (?, ?)
+        UPDATE user_details SET fcm_token = ? WHERE user_id = ?
     `;
     try {
-        const [result] = await db.query(query, [req.user.user_id, fcmToken]);
+        const [result] = await conn.query(query, [FCM_TOKEN, req.user.user_id]);
         res.status(201).json({
             statusCode: 201,
             isError: false,

@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     secure: false, // true for port 465, false for other ports
     auth: {
-        user: "arajayraj0@gmail.com",
-        pass: "uvom baiq natd jlcz",
+        user: "amcucc1921@gmail.com",
+        pass: "ylmf sxvi dsrs puef",
     },
 });
 
@@ -18,15 +18,17 @@ async function sendMail({
     subject = "Email From AMC-UCC",
     text = "Hello User",
     html = "<b>Hello User</b>",
+    attachments = [],
 }) {
     //use comma sparated for multiple to
     // send mail with defined transport object
     const info = await transporter.sendMail({
-        from: "arajayraj0@gmail.com", // sender address
+        from: "amcucc1921@gmail.com", // sender address
         to: to, // list of receivers
         subject: subject, // Subject line
         text: text, // plain text body
         html: html, // html body
+        attachments: attachments,
     });
 
     console.log("Message sent: %s", info.messageId);
