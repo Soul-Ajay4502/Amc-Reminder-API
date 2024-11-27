@@ -103,6 +103,8 @@ const login = async (req, res, next) => {
         }
     } catch (error) {
         return send500Error(res, error);
+    } finally {
+        if (conn) await conn.release();
     }
 };
 
@@ -290,6 +292,8 @@ const changePassword = async (req, res, next) => {
         }
     } catch (error) {
         return send500Error(res, error);
+    } finally {
+        if (conn) await conn.release();
     }
 };
 
@@ -332,6 +336,8 @@ const forgotPassword = async (req, res, next) => {
         }
     } catch (error) {
         return send500Error(res, error);
+    } finally {
+        if (conn) await conn.release();
     }
 };
 
@@ -386,6 +392,8 @@ const resetPassword = async (req, res, next) => {
         }
     } catch (error) {
         return send500Error(res, error);
+    } finally {
+        if (conn) await conn.release();
     }
 };
 
@@ -417,6 +425,8 @@ const setFcmToken = async (req, res, next) => {
     } catch (error) {
         console.error("Error creating item:", error);
         return send500Error(res, error);
+    } finally {
+        if (conn) await conn.release();
     }
 };
 

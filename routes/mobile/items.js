@@ -11,6 +11,7 @@ const {
     searchItem,
     listDeletedItems,
     deleteItem,
+    listDueItems,
 } = require("./controllers/controllerIndex");
 
 router.post("/add", checkAuth, getDbConnection, createItem);
@@ -21,5 +22,6 @@ router.post("/delete", checkAuth, deleteItem);
 router.get("/listby/:id", checkAuth, getItemById);
 router.post("/update", checkAuth, updateItem);
 router.post("/searchItem", checkAuth, searchItem);
+router.get("/listDueItems", checkAuth, listDueItems);
 
 module.exports = router;
