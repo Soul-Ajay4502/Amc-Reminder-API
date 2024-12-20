@@ -237,7 +237,6 @@ const sendReminders = async () => {
         // Execute the query using async/await
         const [results] = await dbConnection.query(itemListQuery);
         const today = new Date().toISOString().split("T")[0];
-        console.log(results);
 
         let filteredItems = [];
         if (results.length > 0) {

@@ -7,7 +7,7 @@ const listItems = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1; // Default page is 1 if not provided
         const limit = parseInt(req.query.limit) || 10;
         const params = [];
-        const query = "SELECT * FROM item_details WHERE item_status = 0";
+        const query = "SELECT * FROM item_details WHERE item_status = 0 ORDER BY created_at DESC";
         const results = await paginate(
             query,
             params,

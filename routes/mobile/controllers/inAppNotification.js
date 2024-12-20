@@ -100,7 +100,7 @@ const notificationList = async (req, res, next) => {
         const limit = parseInt(req.query.limit) || 10;
         const params = [];
         const query =
-            "SELECT * FROM item_details WHERE email_send_on IS NOT NULL";
+            "SELECT * FROM item_details WHERE email_send_on IS NOT NULL ORDER BY email_send_on DESC";
         const results = await paginate(
             query,
             params,

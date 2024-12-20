@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const routes = require("./routes");
 const startCronJobs = require("./common/cron");
 
-// startCronJobs();
+startCronJobs();
 // setup cors
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
